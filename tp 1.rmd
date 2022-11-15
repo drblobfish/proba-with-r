@@ -1,0 +1,149 @@
+---
+title: "TP1"
+author: "Jules Herrmann"
+date: "15 novembre 2022"
+output: html_document
+header-includes:
+  - \usepackage{amsmath}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 1) Tirages aléatoire
+
+### Exercice 1
+
+#### 1
+```{r 1.1.1}
+dice <- 1:6
+sample(dice,1)
+```
+#### 2
+```{r 1.1.2}
+sample(dice,2)
+```
+
+#### 3
+```{r 1.1.3}
+sum(sample(dice,2))
+```
+
+#### 4
+```{r 1.1.4}
+numero_lotto <- 1:49
+sample(numero_lotto,5,replace = FALSE)
+```
+
+### Exercice 2
+
+```{r 1.2}
+sum(sample(rep(0:1,c(5,10)),8,rep=TRUE))
+```
+Cette commande défini une variable $X\sim \mathcal{B}(\frac{2}{3},8)$.
+
+### Exercice 3
+
+```{r 1.3}
+Urne <- function(k,p,q){
+  sample(rep(c("rouge","noir"),c(p,q)),k,rep=FALSE)
+}
+
+Urne(10,5,10)
+```
+
+
+## 2) Fréquence empirique
+
+### Exercice 4
+#### 1
+```{r 2.4.1}
+FreqEmp <- function(n){
+  sum(sample(1:6,n,rep=TRUE)==5)/n
+}
+
+FreqEmp(100)
+```
+#### 2
+
+La fréquence théorique est $\frac{1/6}$.
+
+On peut voir que la valeur empirique semble converger vers la probabilité théorique.
+
+```{r 2.4.2}
+#x <- 10^((0:6)/2)
+x <- 10*(1:100)
+y <- sapply(x,FreqEmp)
+
+plot(x,y,type="l")
+```
+
+## 3) Utilisation de l'aide
+
+### Exercice 5
+
+La fonction `matrix` permet de générer des matrix.
+
+```{r 3.5}
+matrix(1:4,ncol=2,byrow = TRUE)
+```
+
+## 4) Exercice de synthèse
+
+### Exercice 6
+
+#### 1
+```{r 3.6.1}
+nucleotide <- c("A","C","T","G")
+
+sample_sequence <- function(){
+  sample(nucleotide,100,rep=TRUE)
+}
+
+sample_sequence()
+```
+
+#### 2
+```{r 3.6.2}
+
+compare_sequence <- function(seq1,seq2){
+  sum(seq1 == seq2)
+}
+
+compare_sequence(sample_sequence(),sample_sequence())
+```
+#### 3
+```{r 3.6.3}
+
+count_successive <- function(seq){
+  sum(seq[1:99] == seq[2:100])
+}
+
+count_successive(sample_sequence())
+```
+
+#### 4
+
+Si la séquence B est définie, alors pour chaque nucléotide tiré $i$, on peut définir la famille de variable aléatoire $(X_i)_{1\leq i \leq 100}$ avec 
+$$\forall i \quad X_i = \begin{cases}1 & \text{si }B_i = C_i\\ 0 & \text{sinon} \end{cases}$$
+
+On a les $X_i \sim \mathcal{B}(\frac{1}{6})$ iid.
+
+
+Et $N_1 = \sum X_i$, ainsi, $N_1 \sim \mathcal{B}(\frac{1}{6},100)$
+
+
+Si la séquence B est définie, alors on peut définir la famille de variable aléatoire  $(Y_i)_{1\leq i \leq 99}$ avec 
+$$\forall i \quad Y_i = \begin{cases}1 & \text{si }B_i = B_{i+1}\\ 0 & \text{sinon} \end{cases}$$
+On a les $Y_i \sim \mathcal{B}(\frac{1}{6})$ iid.
+
+Et $N_2 = \sum Y_i$, ainsi, $N_1 \sim \mathcal{B}(\frac{1}{6},99)$
+
+
+
+
+
+
+
+
