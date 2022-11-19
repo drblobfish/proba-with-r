@@ -20,3 +20,166 @@ while(sample(0:1,size=1,prob=c(0.3,0.7)) == 0) n<- n+1
 
 print(n)
 ```
+
+Ce code effectue des épreuves de Bernouilli de paramètre $p=0.7$. et compte le nombre d'epreuve à effectuer avant le premier succès.
+Il modélise donc une variable aléatoire suivant une loi géométrique de paramètre $p=0.7$.
+
+### Exercice 2
+
+#### 1
+```{r 5.2.1}
+
+Geometrique <- function(p){
+  n<- 0
+  while(sample(0:1,size=1,prob=c(1-p,p)) == 0) n<- n+1
+  return(n)
+}
+
+Geometrique(0.1)
+```
+
+#### 2
+```{r 5.2.2}
+BinomialNegative <- function(p,k){
+  n<-0
+  r<-0
+  while(n<k){
+    r<-r+1
+    if (sample(0:1,size=1,prob=c(1-p,p)) == 1){
+      n<-n+1
+      }
+  }
+  return(r)
+}
+
+BinomialNegative(0.5,5)
+```
+## 6) Loi de probabilité usuelles
+
+### Exercice 3
+
+#### 1
+
+```{r 6.3.1}
+rbinom(n=30,size=1,prob=.2)
+```
+Appelons $Z$ la variable aléatoire modélisée par ce code, alors il existe $(X)_{i\in [\![1,30 ]\!}$, 3O variables aléatroires, telles que $Z = \underset{i}{\sum}X_i$.
+
+On a $\forall i, X_i \sim \mathcal{B}(0.2)$ donc $Z$ suit une loi binomiale : $Z\sim\mathcal{B}(30,0.2)$
+
+#### 2
+
+##### 2.1
+```{r 6.3.2.1}
+qgeom(p=.5,prob=.2)
+```
+Cette fonction calcule le quantile de la distribution géométrique de paramètre $p=0.2$.
+
+Soit $X\sim \text{Geom}(p)$, $\mathbb{P}(X=x) = (1-p)^{x-1}p$
+
+Donc $$d = F_x(x) = \sum_{i=1}^{x-1} (1-p)^i p = p \frac{1-(1-p)^{x-1}}{1-(1-p)}= 1-(1-p)^{x-1}$$
+$$\Leftrightarrow \quad 1-d = e^{(x-1) ln(1-p)} \Leftrightarrow x = \left\lceil \frac{ln(1-d)}{ln(1-p)} \right \rceil -1$$
+En replacant avec les bonnes valeurs, on a bien $$ \left\lceil \frac{ln(1-0.5)}{ln(1-0.2)} \right \rceil -1 = 3$$ 
+
+##### 2.2
+```{r 6.3.2.2}
+pbinom(q=7,size=5,prob=.3)
+```
+`pbinom` est la fonction de répartition de la loi binomiale de paramètre $n=5$, $p=0.5$.
+
+Or, en 5 tirage,  on obtient toujours moins de 7 succès, donc, avec $X \sim \mathcal{B}(5,0.3)$, $\mathbb{P}(X \leq 7) =1$ ce qui correspond à la valeur obtenue avec le code.
+
+## 7) Loi des grands nombres
+
+### Execrice 4
+```{r 7.4}
+x <- 100*(1:100)
+y <- sapply(x,function(x){mean(rgeom(x,0.3))})
+
+plot(x,y,type="l")
+```
+
+### Execrice 5
+
+#### 1
+```{r 7.5.1}
+monteCarloPi <- function(n){
+  4 * sum(runif(n)**2 + runif(n)**2 <=1)/n
+}
+monteCarloPi(200)
+```
+
+```{r 7.5.1.2}
+x <- 1000*(1:100)
+y <- sapply(x,monteCarloPi)
+
+plot(x,y,type="l")
+```
+
+On remarque qu'on a une précision de 2 décimales pour des n de l'ordre de 10 000 environ.
+
+#### 2
+```{r 7.5.2}
+monteCarloNormalDist <- function(n){
+  sum(abs(rnorm(n))<2)/(n*2)
+}
+monteCarloNormalDist(200)
+
+pnorm(2)-pnorm(0)
+```
+
+## 8) Exercice de synthèse
+
+### Execrice 6
+
+#### 1
+```{r 8.5.1}
+InitPopulation <- function(N){
+  rep(1,N)
+}
+```
+
+#### 2
+```{r 8.5.2}
+IterPop <- function(population,N,p){
+  population * rbinom(N,size=1,1-p)
+}
+
+```
+
+#### 3
+```{r 8.5.3}
+EvolPop <- function(N,p,n){
+  population <- InitPopulation(N)
+  for (i in 1:n){
+    population <- IterPop(population,N,p)
+  }
+  return(population)
+}
+
+```
+
+```{r 8.5.3.2}
+EvolPop(10,0.1,4 )
+
+```
+
+#### 3
+```{r 8.5.4}
+Extinct <- function(N,p){
+  population <- InitPopulation(N)
+  n<-0
+  while(sum(population)>0){
+    population <- IterPop(population,N,p)
+    n<-n+1
+  }
+  return(n)
+}
+
+```
+
+```{r 8.5.4.2 }
+Extinct(10,0.5)
+```
+
+
