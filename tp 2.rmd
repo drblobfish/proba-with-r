@@ -164,7 +164,7 @@ EvolPop(10,0.1,4 )
 
 ```
 
-#### 3
+#### 4
 ```{r 8.5.4}
 Extinct <- function(N,p){
   population <- InitPopulation(N)
@@ -181,5 +181,19 @@ Extinct <- function(N,p){
 ```{r 8.5.4.2 }
 Extinct(10,0.5)
 ```
+
+#### 5
+```{r 8.5.5}
+estimation_esperance <- function(N,p,n){
+  mean(sapply(1:n, function(x){Extinct(N,p)}))
+}
+``` 
+
+```{r 8.5.5.2}
+estimation_esperance(10,0.3,100)
+```
+
+
+
 
 

@@ -1,0 +1,100 @@
+---
+title: "tp 3"
+author: "jules"
+date: "2022-11-20"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## 9) Graphiques
+
+### Exercice 1
+```{r 9.1.1}
+x <- seq(-2,6,by=0.05)
+plot(x,pbinom(x,4,.4),pch='-')
+```
+
+```{r 9.1.2}
+x <- seq(-2,6,by=0.05)
+plot(x,pbinom(x,4,.4),type='l')
+```
+
+
+
+```{r 9.1.3}
+x <- -2:6
+plot(x,pbinom(x,4,.4),type='s')
+```
+
+Les plots (1) et (2) diffèrent par la méthode d'affichage des points : un tiret est affiché pour chaque point en (1) alors qu'une ligne continue passant par tout les points est dessinée pour (2)
+La commande (3) est plus optimisée que les deux première car elle n'évalue la fonction `pbinom` que pour les entiers compris entre -2 et 6, or la loi binomiale prend ses valeurs dans les entiers naturels donc les valeurs de sa fonction de répartition ne change qu'aux entiers naturels.
+
+### Exercice 2
+```{r 9.2}
+x <- seq(-1,3,by=0.05)
+plot(x,punif(x,min = 0,max = 2),col= 'blue',type = 'l')
+lines(x,dunif(x,min = 0,max = 2),col='red',type = 'l')
+legend(-1,1,legend=c("répartition","densité"), col=c("blue","red"),lty=c(1,1))
+```
+
+### Exercice 3
+```{r 9.3.1}
+y<-seq(0,1,by=0.01)
+plot(qunif(y,0,2),y,type='l')
+```
+Cette commande affiche la fonction quantile de la loi uniforme. Cependant, elle l'affiche avec les quantiles en ordonné, le graphique obtenu correspond donc à la fonction de répartition de cett même distribution.
+
+```{r 9.1.2}
+y<-seq(0,1,by=0.01)
+plot(qbinom(y,4,.4),y,type='l')
+```
+Idem, cette commande affiche la fonction quantile de la loi binomiale. Cependant, elle l'affiche avec les quantiles en ordonné, le graphique obtenu correspond donc à la fonction de répartition de cette même distribution.
+
+## 10) Graphiques
+
+### Exercice 4
+```{r 10.4}
+N = 1000
+x <- 1:N
+plot(x, cumsum(sample(1:6,N,replace=TRUE)==5)/x,type="l")
+lines(x,rep(1/6,N),type="l",lty=2)
+```
+
+On observe que la fréquence de 5 converge vers la probabilité d'obtenir un 5. C'est la loi des grands nombres.
+
+### Exercice 5
+```{r 10.5}
+N = 20
+x <- 1:N
+plot(x, cumsum(sample(c(-1,1),N,replace=TRUE)),type="l")
+```
+
+### Exercice 6
+
+Essayons d'estimer la variance de cette loi sur une série de valeur suivant cette distribution.
+
+```{r 10.6.1}
+N = 1000
+x <- 1:N
+plot(x, cumsum(rcauchy(N))/x,type="l")
+```
+
+Regardons maintenant les moyennes empiriques trouvées sur de nombreuses séries indépendantes.
+
+```{r 10.6.2}
+N = 1000
+x <- 1:N
+plot(x, sapply(x, function(x){mean(rcauchy(x))}),type="l")
+```
+
+L'estimateur moyenne empririque ne semble pas converger pour n croissant. Cela s'explique par le fait que la fonction de densité de la la loi de cauchy n'est pas intégrable. La loi de cauchy n'admet donc pas d'espérance.
+
+
+
+
+
+
+
