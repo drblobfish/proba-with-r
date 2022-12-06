@@ -92,6 +92,29 @@ plot(x, sapply(x, function(x){mean(rcauchy(x))}),type="l")
 
 L'estimateur moyenne empririque ne semble pas converger pour n croissant. Cela s'explique par le fait que la fonction de densité de la la loi de cauchy n'est pas intégrable. La loi de cauchy n'admet donc pas d'espérance.
 
+## 11) Les fluctuations autour de la limite
+
+### Exercice 7
+```{r 11.7.1}
+N = 10000
+x <- 1:N
+plot(x, log(x)*((cumsum(sample(1:6,N,replace=TRUE)==5)/x)-(1/6)),type="l")
+lines(x,rep(0,N),type="l",lty=2)
+```
+```{r 11.7.2}
+N = 10000
+x <- 1:N
+plot(x, sqrt(x)*((cumsum(sample(1:6,N,replace=TRUE)==5)/x)-(1/6)),type="l")
+lines(x,rep(0,N),type="l",lty=2)
+```
+
+
+```{r 11.7.3}
+N = 10000
+x <- 1:N
+plot(x, ((cumsum(sample(1:6,N,replace=TRUE)==5))-(x/6)),type="l")
+lines(x,rep(0,N),type="l",lty=2)
+```
 
 
 
